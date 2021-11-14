@@ -1,0 +1,29 @@
+@charset "UTF-8";
+* {
+	margin: 0px; 
+	padding: 0px; 
+	box-sizing: border-box;
+}
+
+body, html {
+	height: 100%;
+	font-family:'Comic Sans MS';
+	background-color:#741b47!important;
+	color:white!important;
+}
+
+.bg-1{
+	background-color:#351c75;
+}
+
+.bg-2{
+	background-color:#f7c11a;
+}
+
+.bg-3{
+	background-color:#e27a0d;
+}
+
+.bg-4{
+	background-color:#c62020;
+}

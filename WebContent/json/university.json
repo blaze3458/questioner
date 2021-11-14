@@ -1,0 +1,969 @@
+{
+	"university": [
+		{
+			"id": 1,
+			"name": "Abant İzzet Baysal Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 2,
+			"name": "Abdullah Gül Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 3,
+			"name": "Acıbadem Mehmet Ali Aydınlar Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 4,
+			"name": "Adana Bilim Ve Teknoloji Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 5,
+			"name": "Adıyaman Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 6,
+			"name": "Adnan Menderes Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 7,
+			"name": "Afyon Kocatepe Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 8,
+			"name": "Ağrı İbrahim Çeçen Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 9,
+			"name": "Ahi Evran Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 10,
+			"name": "Akdeniz Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 11,
+			"name": "Aksaray Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 12,
+			"name": "Alanya Alaaddin Keykubat Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 13,
+			"name": "Alanya Hamdullah Emin Paşa Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 14,
+			"name": "Altınbaş Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 15,
+			"name": "Amasya Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 16,
+			"name": "Anadolu Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 17,
+			"name": "Ankara Sosyal Bilimler Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 18,
+			"name": "Ankara Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 19,
+			"name": "Ankara Yıldırım Beyazıt Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 20,
+			"name": "Antalya Akev Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 21,
+			"name": "Antalya Bilim Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 22,
+			"name": "Ardahan Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 23,
+			"name": "Artvin Çoruh Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 24,
+			"name": "Ataşehir Adıgüzel Meslek Yüksekokulu",
+			"created_at": null
+		},
+		{
+			"id": 25,
+			"name": "Atatürk Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 26,
+			"name": "Atılım Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 27,
+			"name": "Avrasya Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 28,
+			"name": "Avrupa Meslek Yüksekokulu",
+			"created_at": null
+		},
+		{
+			"id": 29,
+			"name": "Bahçeşehir Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 30,
+			"name": "Balıkesir Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 31,
+			"name": "Bandırma Onyedi Eylül Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 32,
+			"name": "Bartın Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 33,
+			"name": "Başkent Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 34,
+			"name": "Batman Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 35,
+			"name": "Bayburt Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 36,
+			"name": "Beykent Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 37,
+			"name": "Beykoz Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 38,
+			"name": "Bezm-İ Âlem Vakıf Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 39,
+			"name": "Bilecik Şeyh Edebali Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 40,
+			"name": "Bingöl Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 41,
+			"name": "Biruni Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 42,
+			"name": "Bitlis Eren Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 43,
+			"name": "Boğaziçi Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 44,
+			"name": "Bozok Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 45,
+			"name": "Bursa Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 46,
+			"name": "Bülent Ecevit Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 47,
+			"name": "Canik Başarı Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 48,
+			"name": "Cumhuriyet Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 49,
+			"name": "Çağ Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 50,
+			"name": "Çanakkale Onsekiz Mart Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 51,
+			"name": "Çankaya Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 52,
+			"name": "Çankırı Karatekin Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 53,
+			"name": "Çukurova Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 54,
+			"name": "Dicle Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 55,
+			"name": "Doğuş Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 56,
+			"name": "Dokuz Eylül Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 57,
+			"name": "Dumlupınar Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 58,
+			"name": "Düzce Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 59,
+			"name": "Ege Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 60,
+			"name": "Erciyes Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 61,
+			"name": "Erzincan Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 62,
+			"name": "Erzurum Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 63,
+			"name": "Eskişehir Osmangazi Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 64,
+			"name": "Faruk Saraç Tasarım Meslek Yüksekokulu",
+			"created_at": null
+		},
+		{
+			"id": 65,
+			"name": "Fatih Sultan Mehmet Vakıf Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 66,
+			"name": "Fırat Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 67,
+			"name": "Galatasaray Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 68,
+			"name": "Gazi Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 69,
+			"name": "Gaziantep Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 70,
+			"name": "Gaziosmanpaşa Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 71,
+			"name": "Gebze Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 72,
+			"name": "Giresun Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 73,
+			"name": "Gümüşhane Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 74,
+			"name": "Hacettepe Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 75,
+			"name": "Hakkari Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 76,
+			"name": "Haliç Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 77,
+			"name": "Harran Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 78,
+			"name": "Hasan Kalyoncu Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 79,
+			"name": "Hitit Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 80,
+			"name": "Iğdır Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 81,
+			"name": "Işık Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 82,
+			"name": "İbn Haldun Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 83,
+			"name": "İhsan Doğramacı Bilkent Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 84,
+			"name": "İnönü Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 85,
+			"name": "İskenderun Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 86,
+			"name": "İstanbul 29 Mayıs Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 87,
+			"name": "İstanbul Arel Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 88,
+			"name": "İstanbul Aydın Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 89,
+			"name": "İstanbul Ayvansaray Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 90,
+			"name": "İstanbul Bilgi Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 91,
+			"name": "İstanbul Bilim Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 92,
+			"name": "İstanbul Esenyurt Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 93,
+			"name": "İstanbul Gedik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 94,
+			"name": "İstanbul Gelişim Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 95,
+			"name": "İstanbul Kavram Meslek Yüksekokulu",
+			"created_at": null
+		},
+		{
+			"id": 96,
+			"name": "İstanbul Kemerburgaz Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 97,
+			"name": "İstanbul Kent Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 98,
+			"name": "İstanbul Kültür Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 99,
+			"name": "İstanbul Medeniyet Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 100,
+			"name": "İstanbul Medipol Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 101,
+			"name": "İstanbul Rumeli Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 102,
+			"name": "İstanbul Sabahattin Zaim Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 103,
+			"name": "İstanbul Şehir Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 104,
+			"name": "İstanbul Şişli Meslek Yüksekokulu",
+			"created_at": null
+		},
+		{
+			"id": 105,
+			"name": "İstanbul Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 106,
+			"name": "İstanbul Ticaret Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 107,
+			"name": "İstanbul Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 108,
+			"name": "İstanbul Yeni Yüzyıl Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 109,
+			"name": "İstinye Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 110,
+			"name": "İzmir Bakırçay Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 111,
+			"name": "İzmir Demokrasi Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 112,
+			"name": "İzmir Ekonomi Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 113,
+			"name": "İzmir Katip Çelebi Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 114,
+			"name": "İzmir Yüksek Teknoloji Enstitüsü",
+			"created_at": null
+		},
+		{
+			"id": 115,
+			"name": "Kadir Has Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 116,
+			"name": "Kafkas Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 117,
+			"name": "Kahramanmaraş Sütçü İmam Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 118,
+			"name": "Kapadokya Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 119,
+			"name": "Karabük Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 120,
+			"name": "Karadeniz Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 121,
+			"name": "Karamanoğlu Mehmetbey Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 122,
+			"name": "Kastamonu Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 123,
+			"name": "Kırıkkale Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 124,
+			"name": "Kırklareli Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 125,
+			"name": "Kilis 7 Aralık Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 126,
+			"name": "Kocaeli Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 127,
+			"name": "Koç Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 128,
+			"name": "Konya Gıda Ve Tarım Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 129,
+			"name": "Kto Karatay Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 130,
+			"name": "Maltepe Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 131,
+			"name": "Manisa Celâl Bayar Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 132,
+			"name": "Mardin Artuklu Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 133,
+			"name": "Marmara Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 134,
+			"name": "Mef Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 135,
+			"name": "Mehmet Akif Ersoy Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 136,
+			"name": "Melikşah Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 137,
+			"name": "Mersin Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 138,
+			"name": "Mimar Sinan Güzel Sanatlar Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 139,
+			"name": "Muğla Sıtkı Koçman Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 140,
+			"name": "Munzur Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 141,
+			"name": "Mustafa Kemal Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 142,
+			"name": "Muş Alparslan Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 143,
+			"name": "Namık Kemal Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 144,
+			"name": "Necmettin Erbakan Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 145,
+			"name": "Nevşehir Hacı Bektaş Veli Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 146,
+			"name": "Niğde Ömer Halisdemir Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 147,
+			"name": "Niğde Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 148,
+			"name": "Nişantaşı Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 149,
+			"name": "Nuh Naci Yazgan Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 150,
+			"name": "Okan Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 151,
+			"name": "Ondokuz Mayıs Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 152,
+			"name": "Ordu Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 153,
+			"name": "Orta Doğu Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 154,
+			"name": "Osmaniye Korkut Ata Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 155,
+			"name": "Özyeğin Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 156,
+			"name": "Pamukkale Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 157,
+			"name": "Piri Reis Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 158,
+			"name": "Recep Tayyip Erdoğan Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 159,
+			"name": "Sabancı Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 160,
+			"name": "Sağlık Bilimleri Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 161,
+			"name": "Sakarya Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 162,
+			"name": "Sanko Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 163,
+			"name": "Selçuk Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 164,
+			"name": "Siirt Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 165,
+			"name": "Sinop Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 166,
+			"name": "Süleyman Demirel Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 167,
+			"name": "Şırnak Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 168,
+			"name": "Ted Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 169,
+			"name": "Tobb Ekonomi Ve Teknoloji Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 170,
+			"name": "Toros Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 171,
+			"name": "Trakya Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 172,
+			"name": "Türk Hava Kurumu Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 173,
+			"name": "Türk-Alman Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 174,
+			"name": "Ufuk Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 175,
+			"name": "Uludağ Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 176,
+			"name": "Uşak Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 177,
+			"name": "Üsküdar Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 178,
+			"name": "Yalova Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 179,
+			"name": "Yaşar Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 180,
+			"name": "Yeditepe Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 181,
+			"name": "Yıldız Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 182,
+			"name": "Yüksek İhtisas Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 183,
+			"name": "Yüzüncü Yıl Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 184,
+			"name": "Bâb-ı Âlem",
+			"created_at": null
+		},
+		{
+			"id": 192,
+			"name": "Eskişehir Teknik Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 193,
+			"name": "Isparta Uygulamalı Bilimler Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 194,
+			"name": "Kayseri Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 195,
+			"name": "Kütahya Sağlık Bilimleri Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 196,
+			"name": "Lokman Hekim Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 197,
+			"name": "Sakarya Uygulamalı Bilimler Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 198,
+			"name": "Trabzon Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 199,
+			"name": "Ankara Hacı Bayram Veli Üniversitesi",
+			"created_at": null
+		},
+		{
+			"id": 200,
+			"name": "Ankara Müzik ve Güzel Sanatlar Üniversitesi",
+			"created_at": null
+		}
+	]
+}
