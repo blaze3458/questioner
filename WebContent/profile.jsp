@@ -99,7 +99,11 @@
 				<div class="bg-white border rounded p-2 m-r-5 shadow-sm">
 					<nav class="navbar navbar-expand-lg navbar-dark bg-blue" aria-label="Eighth navbar example">
     					<div class="container">
-      						<div class="collapse navbar-collapse" id="navbarsExample07">
+    						<p class="navbar-brand">Questioner</p>
+    						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#profileNavbar" aria-controls="profileNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      							<span class="navbar-toggler-icon"></span>
+    						</button>
+      						<div class="collapse navbar-collapse" id="profileNavbar">
         						<ul class="nav nav-tabs me-auto mb-2 mb-lg-0">
          							<li class="nav-item" role="presentation">
          								<button class="nav-link text-white active" id="exams-tab" data-bs-toggle="tab" data-bs-target="#exams" type="button" role="tab" aria-controls="exams" aria-selected="true">Sýnavlarým</button>
