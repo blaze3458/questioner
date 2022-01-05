@@ -24,17 +24,25 @@
 </head>
 <body>
 <%@page 
-	import= "javax.servlet.http.HttpSession"
+	import= "jakarta.servlet.http.HttpSession"
 	import= "java.util.ArrayList"
-	import= "db.questioner.Users"
-	import= "db.questioner.Exams" 
+	import= "com.questioner.model.Users"
+	import= "com.questioner.model.StudentExams" 
 	
 %>
 <% 
 	Users user = (Users)session.getAttribute("user"); 
-	ArrayList<Exams> exams = (ArrayList<Exams>)session.getAttribute("exams");
+	ArrayList<StudentExams> exams = (ArrayList<StudentExams>)session.getAttribute("exams");
 %>
-	<div id="alert" class="fixed-top align-items-end flex-column d-none"></div>
+	<div id="alert" class="fixed-bottom" style="left:unset;">
+	<%if(request.getAttribute("response") != null) {%>
+		<%if((int)request.getAttribute("errorCode") >= 1) {%>
+			<div class="alert alert-danger"><%= request.getAttribute("errorMsg") %></div>
+		<%}else{ %>
+			<div class="alert alert-success"><%= request.getAttribute("errorMsg") %></div>
+		<%} %>
+	<%}%>
+	</div>
 	<div class="limiter">
 	<%if(user != null){ %>
 		
@@ -69,9 +77,9 @@
 			<div class="p-t-100 p-b-200">
 				<div class="flex-col-c flex-2 m-r-20">
 					<div class="txt-l text-left m-b-10">Herhangi bir sýnava kayýt olmadýn. Þimdi kodunu gir ve sýnava baþla.</div>
-					<form class="lg-form" action="/find_exam" method="POST">
+					<form class="lg-form" action="/find_exam" method="GET">
 						<div class="flex-col">
-							<input class="inp" name="password" type="text" placeholder="Sýnav kodunu girin">
+							<input class="inp" name="exam_uuid" type="text" placeholder="Sýnav kodunu girin">
 						</div>
 						<div class="flex-col">
 							<button class="btn btn-b btn-blue">Ara</button>
@@ -90,33 +98,33 @@
 				<div class="accordion" id="examAcordion">
 				<%
 					for(int i = 0; i < exams.size(); ++i){ 
-					Exams e = exams.get(i);
+						StudentExams e = exams.get(i);
 				%>
 					<div class="accordion-item">
 						<h2 class="accordion-header" id="exam_<%=e.getId() %>">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#examCol_<%=e.getId() %>" aria-expanded="false" aria-controls="examCol_<%=e.getId() %>"><%=e.getHeader() %></button>
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#examCol_<%=e.getId() %>" aria-expanded="false" aria-controls="examCol_<%=e.getId() %>"><%=e.getExam().getHeader() %></button>
 						</h2>
 						<div id="examCol_<%=e.getId() %>" class="accordion-collapse collapse" aria-labelledby="exam_<%=e.getId() %>" data-bs-parent="#examAcordion">
       						<div class="accordion-body">
         						<h6 class="site-header">Sýnav Bilgileri</h6>
       							<hr />
         						<ul>
-        							<li class="p-b-10"><%= e.getInformation()%></li>
-        							<li class="p-b-5"><p>Soru sayýsý  : <%=e.getQuestionCount() %></p></li>
-        							<li class="p-b-5"><p>Sýnav süresi : <%=e.getTime() %></p></li>
+        							<li class="p-b-10"><%= e.getExam().getInformation()%></li>
+        							<li class="p-b-5"><p>Soru sayýsý  : <%=e.getExam().getQuestionCount() %></p></li>
+        							<li class="p-b-5"><p>Sýnav süresi : <%=e.getExam().getTime() %></p></li>
         						</ul>
         						<hr/>
         						<div class="flex-sb">
         							<div class="flex-col">
         								<div class="p-b-5">Baþlama tarihi - Bitiþ tarihi</div>
-        								<div class="p-b-5"><%= e.getStartDateStr() %> - <%= e.getEndDateStr() %></div>
+        								<div class="p-b-5"><%= e.getExam().getStartDateStr() %> - <%= e.getExam().getEndDateStr() %></div>
         							</div>
         							<div class="flex-col-r">
-        							<%if(e.isInterval()) {%>
-        								<a class="btn btn-primary" href="/exam/test_id_1414141241">Sýnava baþla</a>
+        							<%if(e.getExam().isInterval()) {%>
+        								<a class="btn btn-primary" href="/exam?id=<%=e.getExam().getId()%>">Sýnava baþla</a>
         							<%}else{ %>
         									<div class="p-b-5">Sýnavýn baþlamasýna:</div>
-        									<div class="p-b-5" data-id="<%=e.getId() %>"  data-timeout = "<%=e.getStartTime()%>" data-startTime = "<%=e.getStartDateMilis()%>"><%= e.getTimeOutStr() %></div>
+        									<div class="p-b-5" data-id="<%=e.getId() %>"  data-timeout = "<%=e.getExam().getEndDate()%>" data-startTime = "<%=e.getExam().getStartDate()%>"></div>
         							<%} %>
         							</div>
         						</div>

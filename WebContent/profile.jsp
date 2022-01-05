@@ -24,25 +24,25 @@
 </head>
 <body>
 <%@page 
-	import= "javax.servlet.http.HttpSession"
+	import= "jakarta.servlet.http.HttpSession"
 	import= "java.util.ArrayList"
-	import= "db.questioner.Users"
-	import= "db.questioner.Exams"
-	import= "db.questioner.Teachers"
-	import= "db.questioner.University"
-	import= "db.questioner.Faculty"
-	import= "db.questioner.Department"
+	import= "com.questioner.model.Users"
+	import= "com.questioner.model.StudentExams"
+	import= "com.questioner.model.StudentTeachers"
+	import= "com.questioner.model.University"
+	import= "com.questioner.model.Faculty"
+	import= "com.questioner.model.Department"
 %>
 <% 
 	Users user = (Users)session.getAttribute("user");
 	ArrayList<Object> universityInfo = (ArrayList<Object>)session.getAttribute("university_info");
-	ArrayList<Exams> exams_old = (ArrayList<Exams>)session.getAttribute("exams_old");
-	ArrayList<Teachers> teachers = (ArrayList<Teachers>)session.getAttribute("teachers");
+	ArrayList<StudentExams> exams_old = (ArrayList<StudentExams>)session.getAttribute("exams_old");
+	ArrayList<StudentTeachers> teachers = (ArrayList<StudentTeachers>)session.getAttribute("teachers");
 	University uni = (University) universityInfo.get(0);
 	Faculty fac = (Faculty) universityInfo.get(1);
 	Department dep = (Department) universityInfo.get(2);
 %>
-			<div id="alert" class="fixed-top align-items-end flex-column d-none"></div>
+	<div id="alert" class="fixed-bottom" style="left:unset;"></div>
 	<div class="limiter">
 		<div class="nav-con">
 			<nav class="nav-i flex-l-m">
@@ -70,10 +70,23 @@
 		<div class="container-xxl d-flex">
 			<div class="container-fluid p-2 col-3 bd-highlight">
 				<div class="d-flex flex-column bg-white border rounded m-r-5 shadow-sm">
-					<div class="p-t-20 p-b-20 text-center"><img class="img-thumbnail rounded-circle" width=150 height=150 src="<%=user.getProfileUrl() %>"/></div>
+					<div class="p-t-20 p-b-20 text-center">
+						<label class="avatar-change" for="avatar-input">
+							<div class="avatar-change-cover"><i class="zmdi zmdi-hc-fw zmdi-collection-folder-image"></i></div>
+							<img id="avatar-big" class="img-thumbnail rounded-circle" width=150 height=150 src="<%=user.getProfileUrl() %>"/>
+							<input id="avatar-input" name="avatar" type="file" accept=".jpg,.png,.jpeg,"/>
+						</label>
+					</div>
 					<div class="p-b-20 text-center">
 						<div class="p-b-5"><p class="fw-light fs-16"><%=user.getName() %> <%=user.getSurname() %></p></div>
-						<div class="p-b-5"><i class="fs-13"><%=user.getBio() %></i><button><i class="zmdi zmdi-hc-fw zmdi-edit"></i></button></div>
+						<div class="container p-b-5">
+							<div class="row justify-content-center">
+								<div id="bio" class="col ms-3 me-3 fs-13" contenteditable="false"><%=user.getBio()%></div>
+								<div class="col-12">
+									<button id="change_bio"><i class="zmdi zmdi-hc-fw zmdi-edit"></i></button>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="p-b-20">
 						<button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#uni-collapse" aria-expanded="false">Okul Bilgileri</button>
@@ -112,8 +125,12 @@
           								<button class="nav-link text-white" id="teachers-tab" data-bs-toggle="tab" data-bs-target="#teachers" type="button" role="tab" aria-controls="teachers" aria-selected="false">Öðretmenlerim</button>
           							</li>
         						</ul>
-        						<form>
-          							<input class="form-control" type="text" placeholder="Ara" aria-label="Ara">
+        						<form class="position-relative">
+          							<input id="profile_search" class="form-control" type="text" placeholder="Ara" aria-label="Ara" data-section="exams">
+          							<div id="search-container" class="container rounded shadow bg-color-form">
+          								<div id="search_results" class="col g-1 mt-3 mb-3">
+          								</div>
+          							</div>
         						</form>
       						</div>
     					</div>
@@ -124,27 +141,34 @@
 							<hr>
 							<div class="acordion" id="examAccordion">
 							<%for(int i = 0; i < exams_old.size(); ++i){ 
-								Exams e = exams_old.get(i);
+								StudentExams e = exams_old.get(i);
 							%>
 								<div class="accordion-item">
 									<h2 class="accordion-header" id="exam_<%=e.getId() %>">
-										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#examCol_<%=e.getId() %>" aria-expanded="false" aria-controls="examCol_<%=e.getId() %>"><%=e.getHeader() %></button>
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#examCol_<%=e.getId() %>" aria-expanded="false" aria-controls="examCol_<%=e.getId() %>"><%=e.getExam().getHeader() %></button>
 									</h2>
 									<div id="examCol_<%=e.getId() %>" class="accordion-collapse collapse" aria-labelledby="exam_<%=e.getId() %>" data-bs-parent="#examAccordion">
       									<div class="accordion-body">
         									<h6 class="site-header">Sýnav Bilgileri</h6>
       										<hr />
         									<ul>
-        										<li class="p-b-10"><%= e.getInformation()%></li>
-        										<li class="p-b-5"><p>Soru sayýsý  : <%=e.getQuestionCount() %></p></li>
-        										<li class="p-b-5"><p>Sýnav süresi : <%=e.getTime() %></p></li>
+        										<li class="p-b-10"><%= e.getExam().getInformation()%></li>
+        										<li class="p-b-5"><p>Soru sayýsý  : <%=e.getExam().getQuestionCount() %></p></li>
+        										<li class="p-b-5"><p>Sýnav süresi : <%=e.getExam().getTime() %></p></li>
         									</ul>
-        									<div class="p-t-5 p-b-5 text-end blockquote-footer">Sýnav Öðretmeni: <%=e.getTeacherName() %> <%=e.getTeacherSurname() %></div>
+        									<div class="p-t-5 p-b-5 text-end blockquote-footer">Sýnav Öðretmeni: <%=e.getExam().getCourse().getTeacher().getUser().getFullname() %></div>
         									<hr/>
         									<div class="flex-sb">
         										<div class="flex-col">
         											<div class="p-b-5">Baþlama tarihi - Bitiþ tarihi</div>
-        											<div class="p-b-5"><%= e.getStartDateStr() %> - <%= e.getEndDateStr() %></div>
+        											<div class="p-b-5"><%= e.getExam().getStartDateStr() %> - <%= e.getExam().getEndDateStr() %></div>
+        										</div>
+        										<div class="flex-col">
+        											<div class="p-b-5">Sýnav sonucun:</div>
+        											<div class="p-b-5"><%= e.getResult() %></div>
+        										</div>
+        										<div class="flex-col">
+        											<div class="p-b-5"><a href="/exams/<%=e.getId()%>" class="btn btn-primary">Sýnavý görüntüle</a></div>
         										</div>
         									</div>
       									</div>
@@ -159,12 +183,12 @@
 							<div class="container">
 								<div class="row border rounded p-2" id="teacherContainer">
 							<%for(int i = 0; i < teachers.size(); ++i){ 
-								Teachers e = teachers.get(i);
+								StudentTeachers e = teachers.get(i);
 							%>
 								
-									<a class="col-sm-2 text-center p-3 border-effect" href="/teacher/<%=e.getTeacherId()%>">
-										<div class="p-b-10"><img class="img-thumbnail rounded-circle" width=100 height=100 src="<%=e.getProfileUrl() %>"/></div>
-										<div class="p-b-10"><p class="text-nowrap text-center fs-6 header-blue"><%=e.getFullname()%></div>
+									<a class="col-sm-2 text-center p-3 border-effect" href="/teacher/<%=e.getId()%>">
+										<div class="p-b-10"><img class="img-thumbnail rounded-circle" width=100 height=100 src="<%=e.getTeacher().getUser().getProfileUrl() %>"/></div>
+										<div class="p-b-10"><p class="text-nowrap text-center fs-6 header-blue"><%=e.getTeacher().getUser().getFullname()%></div>
 									</a>
 						<%} %>
 								</div>

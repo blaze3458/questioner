@@ -4,6 +4,10 @@ $(document).ready(function() {
 	initializeUniversityList();
 });
 
+$(document).on('click','body', function(){
+	closeSearchResults();
+});
+
 $(document).on("click",'#signUpForm',function(){
     $('.fix-full').first().toggleClass("show");
     $('.limiter').first().toggleClass("limitter-blur");
@@ -104,36 +108,161 @@ $(document).on("change", '[name=faculty]', function(){
 	});
 });
 
+$(document).on("keyup",'#profile_search',function(){
+	var value = $(this).val();
+	var section = $(this).data('section');
+	
+	closeSearchResults();
+	
+	if(value.length < 4)
+		return;
+	
+	$.ajax({
+		url: "/search_profile?section="+section+"&value="+value,
+		type:"GET",
+		contentType: "application/json; charset=utf-8",
+	}).done(function(response,text,jqXHR){
+		
+		if(response.values.length <= 0)
+			return;
+			
+		if(response.section === "exams"){
+			response.values.forEach(k=>{
+				var row = $('<div class="row pt-2 pb-2 fs-14 border-bottom"></div>');
+				var col = $('<a class="col"></a>');
+				$(col).text(k.header);
+				$(col).attr('href',"/exam/"+k.id);
+				$(row).append(col);
+				$('#search_results').append(row);
+			});
+		}
+		else if(response.section === "teachers"){
+			response.values.forEach(k=>{
+				var row = $('<div class="row pt-2 pb-2 fs-14 border-bottom"></div>');
+				var row2 = $('<div class="d-flex align-items-center justify-content-start"></div>');
+				var col = $('<a class="col"></a>');
+				var img = $('<img class="img-thumbnail rounded-circle me-1" width=32 height=32 />');
+				var name = $('<div class="col"></div>');
+				
+				$(img).attr('src', k.profile);
+				$(col).attr('href',"/teacher/"+k.id);
+				$(name).text(k.fullname);
+				
+				$(row2).append(img);
+				$(row2).append(name);
+				$(col).append(row2);
+				$(row).append(col);
+				$('#search_results').append(row);
+			});
+		}
+		
+		$('#search-container').addClass('show');
+	}).fail(function(xhr,textStatus,error){
+		console.log(xhr);
+	});
+});
+
+$(document).on("click", '#exams-tab,#teachers-tab', function(){
+	var section = $(this).data('bs-target');
+	section = section.slice(1,section.length);
+	$('#profile_search').data('section',section);
+});
+
+$(document).on("click", "#change_bio", function(){
+	$('#bio').attr('contenteditable',true);
+	$('#bio').data('old_bio',$('#bio').text());
+});
+
+$(document).on("focusout", '#bio', function(){
+	var edit = $('#bio').data('edit');
+	$('#bio').attr('contenteditable',false);
+	var old_bio = $('#bio').data('old_bio');
+	var new_bio = $('#bio').text();
+	
+	var _data = {
+		old : old_bio,
+		new : new_bio
+	};
+	
+	console.log(_data);
+	
+	if(old_bio != new_bio){
+		$.ajax({
+			url:"/change_bio",
+			type:"POST",
+			context: document.body,
+			data: _data
+		}).done(function(response,text,jqXHR){
+			showResponseMessage(response.errorCode,response.errorMsg);
+			
+		}).fail(function(xhr,textStatus,error){
+			console.log(xhr);
+		});
+	}
+});
+
+$('[name=avatar]').on('change',(e) => {
+	var files =  e.currentTarget.files;
+    var filesize = ((files[0].size/1024)/1024).toFixed(4);
+    var titles = $('body').data('titles');
+        if(filesize > 64){
+            showResponseMessage(false,"Lütfen daha düşük boyutta bir resim seçiniz.");
+            e.currentTarget.files = null;
+        }else{
+			data = new FormData();
+    		data.append('file', e.currentTarget.files[0]);
+			$.ajax({
+				url:"/change_avatar",
+				type:"POST",
+				enctype: 'multipart/form-data',
+				cache:false,
+           	 	processData: false,
+				contentType: false,
+				data:data,
+			}).done(function(response,text,jqXHR){
+				if(response.errorCode){
+					var img = document.getElementById("avatar-big");
+           			imgUrl = URL.createObjectURL(e.currentTarget.files[0]);
+           			img.src = imgUrl;
+				}				
+          		showResponseMessage(response.errorCode,response.errorMsg);
+
+			}).fail(function(xhr,textStatus,error){
+				showResponseMessage(false,"Bir hata ile karşılaşıldı.Lütfen daha sonra tekrar deneyin.");
+			});  	
+        }
+});
+
+function closeSearchResults(){
+	$('#search_results').empty();
+	$('#search-container').removeClass('show');
+}
+
 function showResponseMessage(success, errorMsg){
   var alert = document.createElement('div');
 
   if(success)
-    $(alert).addClass('alert alert-success float-right');
+    $(alert).addClass('alert alert-success');
   else
-    $(alert).addClass('alert alert-warning float-right');
+    $(alert).addClass('alert alert-warning');
 
   	$(alert).html(errorMsg);
   	$('#alert').append(alert);
-  	$('#alert').toggleClass('d-inline-flex');
-	$('#alert').toggleClass('d-none');
 
   setTimeout(() => {
-    $('#alert').toggleClass('d-inline-flex');
-	$('#alert').toggleClass('d-none');
     $('#alert').empty();
   }, (3000));
 }
 
 function initializeExamCounter(){
 	$("[data-timeout]").map((e,k) => {
-		var id = $(k).data('timeout');
 		var timeout = $(k).data('timeout');
 		var startTime = $(k).data('starttime');
-		counter(k,id,startTime, timeout);
+		counter(k,startTime, timeout);
 	});
 }
 
-function counter(elm,id, start, timeout){
+function counter(elm, start, timeout){
 	
 	var startDate = new Date(start);
 	var curDate = new Date();
@@ -165,7 +294,7 @@ function counter(elm,id, start, timeout){
 	
 	$(elm).html(text);
 	
-	setTimeout(()=> {counter(elm,id,start,timeout)},1000);
+	setTimeout(()=> {counter(elm,start,timeout)},1000);
 }
 
 function initializeUniversityList(){
