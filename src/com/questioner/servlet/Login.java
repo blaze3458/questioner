@@ -43,6 +43,7 @@ public class Login extends HttpServlet {
 				ArrayList<Object> universityInfo = dbManager.getStudentUniversityInfo(user.getUniversity().getId(),user.getFaculty().getId(),user.getDepartment().getId());
 				
 				request.getSession().setAttribute("exams", examList);
+				request.getSession().setAttribute("has_exam", Utils.hasAnyExam(examList));
 				request.getSession().setAttribute("teachers", teacherList);
 				request.getSession().setAttribute("exam_count", examList.size());
 				request.getSession().setAttribute("university_info",universityInfo);

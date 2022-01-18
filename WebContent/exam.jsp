@@ -1,12 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-9"
-    pageEncoding="ISO-8859-9"%>
+<%@page import="jakarta.servlet.http.HttpSession" %>
+<%@page	import= "com.google.gson.JsonObject" %>
+<%@page	import= "com.google.gson.JsonParser" %>
+<%@page import="com.google.gson.JsonArray"%>
+
+<%@page import= "java.util.ArrayList" %>
+<%@page import="com.questioner.dictionary.EExamStatus"%>
+<%@page	import= "com.questioner.model.Users"%>
+<%@page	import= "com.questioner.model.Exams" %>
+<%@page	import= "com.questioner.model.ExamQuestions" %>
+	
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <!--===========================================================================-->
 <meta http-equiv = "Content-Type" content="text/html; charset=utf-8">
 <!--===========================================================================-->
-<title>Questioner - Çevrimiçi sýnavlarýnýz için...</title>
+<title>Questioner - Ã‡evrimiÃ§i sÄ±navlarÄ±nÄ±z iÃ§in...</title>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -22,13 +32,15 @@
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 <!--===============================================================================================-->
 <body>
-<%@page 
-	import= "jakarta.servlet.http.HttpSession"
-	import= "java.util.ArrayList"
-	import= "com.questioner.model.Users"
-%>
 <% 
+	int lastQuestNumber = (int)session.getAttribute("last_question_number");
+
 	Users user = (Users)session.getAttribute("user");
+	Exams exam = (Exams)session.getAttribute("exam");
+	ArrayList<ExamQuestions> questions = (ArrayList<ExamQuestions>)session.getAttribute("questions");
+	ExamQuestions quest = questions.get(lastQuestNumber-1);
+	JsonObject jsonObject = JsonParser.parseString(quest.getAnswers()).getAsJsonObject();
+	JsonArray answerArray = jsonObject.get("answers").getAsJsonArray();
 %>
 
 	<div id="alert" class="fixed-bottom" style="left:unset;"></div>
@@ -46,11 +58,11 @@
           				<ul class="dropdown-menu text-small" aria-labelledby="profileMenu">
           					<li><p class="dropdown-item"><%=user.getName() %> <%=user.getSurname() %></p></li>
           					<li><hr class="dropdown-divider"></li>
-           					<li><a class="dropdown-item" href="#">Sýnav Geçmiþi</a></li>
+           					<li><a class="dropdown-item" href="#">SÄ±nav GeÃ§miÅŸi</a></li>
             				<li><a class="dropdown-item" href="#">Ayarlar</a></li>
             				<li><a class="dropdown-item" href="/profile">Profil</a></li>
             				<li><hr class="dropdown-divider"></li>
-            				<li><a class="dropdown-item" href="/logout">Çýkýþ</a></li>
+            				<li><a class="dropdown-item" href="/logout">Ã‡Ä±kÄ±ÅŸ</a></li>
           				</ul>
         			</div>
 				</div>
@@ -59,34 +71,37 @@
 		<div class="con-center p-t-20">
 			<div class="container bg-white rounded">
 				<div class="row">
-					<div class="col p-1 border-bottom"><header class="site-header header-blue text-center"><h1>Sýnav Adý</h1></header></div>
+					<div class="col p-1 border-bottom"><header class="site-header header-blue text-center"><h1><%= exam.getHeader()%></h1></header></div>
 				</div> <!-- UP SIDE -->
 				<div class="row">
 					<div class="container py-5">
 						<div class="row m-1">
 							<div class="col-md-3 bg-color-form rounded py-3 mx-1">
-								<div class="p-2 g-1">Soru: 0/0</div>
-								<div class="p-2 g-1">Kalan Süre:00.00</div>
-								<div class="d-flex justify-content-center p-2 g-1"><a class="btn btn-primary" href="/exam_finish">Sýnavý bitir</a></div>
+								<div class="p-2 g-1">Soru: <%=lastQuestNumber %>/<%=exam.getQuestionCount() %></div>
+								<ul>
+									<li class="p-2 g-1">Puan: <%=quest.getPoint() %></li>
+									<li class="p-2 g-1">Kalan SÃ¼re: 00.00</li>
+								</ul>
+								
+								<div class="d-flex justify-content-center p-2 g-1"><a class="btn btn-primary" href="/exam_finish">SÄ±navÄ± bitir</a></div>
 							</div> <!-- LEFT SIDE -->
 							<div class="col bg-color-form rounded py-3 px-0 mx-1">
-								<div class="border-bottom p-2">
+								<div class="border-bottom py-3">
 									<ul>
-										<li>Soru</li>
+										<li><%=quest.getQuestion() %></li>
 									</ul>
 								</div> <!-- QUESTION CONTENT UP SIDE -->
 								<div class="p-2 g-1">
 									<div class="list-group">
-										<button class="list-group-item list-group-item-action">A</button>
-										<button class="list-group-item list-group-item-action">B</button>
-										<button class="list-group-item list-group-item-action">C</button>
-										<button class="list-group-item list-group-item-action">D</button>
+										<%for(int i = 0; i < answerArray.size(); ++i) {%>				
+										<button class="py-3 list-group-item list-group-item-action"><%=answerArray.get(i).getAsString() %></button>
+										<%} %>
 									</div>
 								</div> <!-- QUESTION CONTENT DOWN SIDE -->
 								<div class="p-2 g-1 d-flex justify-content-center">
 									<div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
 										<button type="button" class="btn btn-primary">Sonraki</button>
-  										<button type="button" class="btn btn-primary">Önceki</button>
+  										<button type="button" class="btn btn-primary">Ã–nceki</button>
 									</div>
 								</div>
 							</div> <!-- RIGHT SIDE -->
@@ -103,25 +118,25 @@
         			<h5>Questioner</h5>
         			<ul class="nav flex-column">
           				<li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-muted">Ana sayfa</a></li>
-          				<li class="nav-item mb-2"><a href="/help" class="nav-link p-0 text-muted">Yardým</a></li>
-          				<li class="nav-item mb-2"><a href="/policies" class="nav-link p-0 text-muted">Koþullar</a></li>
-          				<li class="nav-item mb-2"><a href="/faq" class="nav-link p-0 text-muted">Sýkça sorulan sorular</a></li>
-          				<li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-muted">Hakkýmýzda</a></li>
+          				<li class="nav-item mb-2"><a href="/help" class="nav-link p-0 text-muted">YardÄ±m</a></li>
+          				<li class="nav-item mb-2"><a href="/policies" class="nav-link p-0 text-muted">KoÅŸullar</a></li>
+          				<li class="nav-item mb-2"><a href="/faq" class="nav-link p-0 text-muted">SÄ±kÃ§a sorulan sorular</a></li>
+          				<li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-muted">HakkÄ±mÄ±zda</a></li>
         			</ul>
       			</div>
       			<div class="col-2">
         			<h5>Site</h5>
         			<ul class="nav flex-column">
-          				<li class="nav-item mb-2"><a href="/site_map" class="nav-link p-0 text-muted">Site haritasý</a></li>
-          				<li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-muted">Özellikler</a></li>
+          				<li class="nav-item mb-2"><a href="/site_map" class="nav-link p-0 text-muted">Site haritasÄ±</a></li>
+          				<li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-muted">Ã–zellikler</a></li>
           				<li class="nav-item mb-2"><a href="/career" class="nav-link p-0 text-muted">Kariyer</a></li>
-          				<li class="nav-item mb-2"><a href="/cookies" class="nav-link p-0 text-muted">Çerezler</a></li>
+          				<li class="nav-item mb-2"><a href="/cookies" class="nav-link p-0 text-muted">Ã‡erezler</a></li>
         			</ul>
       			</div>
       			<div class="col-4 offset-1">
         			<form>
-          				<h5>Bültene abone ol</h5>
-          				<p>Aylýk haberlerden haberdar olmak ve bildirimler almak için abone ol.</p>
+          				<h5>BÃ¼ltene abone ol</h5>
+          				<p>AylÄ±k haberlerden haberdar olmak ve bildirimler almak iÃ§in abone ol.</p>
           				<div class="d-flex w-100 gap-2">
             				<label for="newsletter1" class="visually-hidden">Email adresi</label>
             				<input id="newsletter1" type="text" class="form-control" placeholder="Email adresi">
@@ -131,7 +146,7 @@
       			</div>
     		</div>
     		<div class="d-flex justify-content-between py-4 my-4 border-top">
-      			<p>Questioner © 2021 Company, Inc. Tüm haklarý saklýdýr.</p>
+      			<p>Questioner Â© 2021 Company, Inc. TÃ¼m haklarÄ± saklÄ±dÄ±r.</p>
       			<ul class="list-unstyled d-flex">
         			<li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use href="/svg/twitter.svg#twitter"></use></svg></a></li>
         			<li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="/svg/instagram.svg#instagram"></use></svg></a></li>

@@ -8,13 +8,16 @@ import javax.sql.*;
 import com.questioner.builder.CourseBuilder;
 import com.questioner.builder.DepartmentBuilder;
 import com.questioner.builder.ExamBuilder;
+import com.questioner.builder.ExamQuestionBuilder;
 import com.questioner.builder.FacultyBuilder;
 import com.questioner.builder.StudentExamBuilder;
 import com.questioner.builder.StudentTeacherBuilder;
 import com.questioner.builder.TeacherBuilder;
 import com.questioner.builder.UniversityBuilder;
 import com.questioner.builder.UserBuilder;
+import com.questioner.dictionary.EExamStatus;
 import com.questioner.model.Department;
+import com.questioner.model.ExamQuestions;
 import com.questioner.model.Exams;
 import com.questioner.model.Faculty;
 import com.questioner.model.StudentExams;
@@ -61,8 +64,13 @@ public class DatabaseManager
 	
 	private boolean executeSQL() {
 		boolean ret;
+		int index = 1;
 		try {
 			st = con.prepareStatement(sql.getSQL());
+			for(Object o : sql.getValues()) {
+				st.setObject(index++, o);
+			}
+			
 			ret = st.execute();
 			ret = !ret;
 			
@@ -135,7 +143,7 @@ public class DatabaseManager
 		ResultSet result = executeSQLResulted();	
 		
 		try {
-			if(result.next()) {
+			if(result != null && result.next()) {
 				UserBuilder userBuilder = new UserBuilder();
 				UniversityBuilder universityBuilder = new UniversityBuilder();
 				FacultyBuilder facultyBuilder = new FacultyBuilder();
@@ -169,7 +177,7 @@ public class DatabaseManager
 		ResultSet result = executeSQLResulted();
 		
 		try {
-			while(result.next()) {
+			while(result != null && result.next()) {
 				TeacherBuilder teacherBuilder = new TeacherBuilder();
 				UserBuilder userBuilder = new UserBuilder();
 				
@@ -240,7 +248,7 @@ public class DatabaseManager
 	public ArrayList<StudentExams> getStudentExamsByUserIdAndNow(long user_id){
 		ArrayList<StudentExams> studentExams = new ArrayList<>();
 		
-		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
+		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.status AS s_status, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
 				+ "	e.*, c.id AS course_id, c.name AS course_name, c.description AS course_description, c.created_at AS course_created_at,"
 				+ "	c.updated_at AS course_updated_at, t.id AS teacher_id, u.fullname AS teacher_name"
 				+ " FROM student_exams s INNER JOIN exams e ON s.exam_id = e.id INNER JOIN courses c ON e.course_id = c.id"
@@ -249,7 +257,7 @@ public class DatabaseManager
 		sql.setValues(user_id);
 		ResultSet result = executeSQLResulted();
 		try {
-			while(result.next()) {
+			while(result != null && result.next()) {
 				StudentExamBuilder studentExamBuilder = new StudentExamBuilder();
 				ExamBuilder examBuilder = new ExamBuilder();
 				CourseBuilder courseBuilder = new CourseBuilder();
@@ -269,7 +277,8 @@ public class DatabaseManager
 				.setUpdatedAt(result.getTimestamp("updated_at").getTime()).setCourse(courseBuilder.getBuild());
 				
 				studentExamBuilder.setId(result.getLong("s_id")).setResult(result.getFloat("s_result")).setCreatedAt(result.getTimestamp("s_created_at").getTime())
-				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime()).setStudent(null).setExam(examBuilder.getBuild());
+				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime())
+				.setStatus(EExamStatus.valueOf(result.getString("s_status"))).setStudent(null).setExam(examBuilder.getBuild());
 				
 				studentExams.add(studentExamBuilder.getBuild());
 			}
@@ -284,7 +293,7 @@ public class DatabaseManager
 	public ArrayList<StudentExams> getStudentExamsByUserIdAndThen(long user_id){
 		ArrayList<StudentExams> studentExams = new ArrayList<>();
 		
-		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
+		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.status AS s_status, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
 				+ "	e.*, c.id AS course_id, c.name AS course_name, c.description AS course_description, c.created_at AS course_created_at,"
 				+ "	c.updated_at AS course_updated_at, t.id AS teacher_id, u.fullname AS teacher_name"
 				+ " FROM student_exams s INNER JOIN exams e ON s.exam_id = e.id INNER JOIN courses c ON e.course_id = c.id"
@@ -293,7 +302,7 @@ public class DatabaseManager
 		sql.setValues(user_id);
 		ResultSet result = executeSQLResulted();
 		try {
-			while(result.next()) {
+			while(result != null && result.next()) {
 				StudentExamBuilder studentExamBuilder = new StudentExamBuilder();
 				ExamBuilder examBuilder = new ExamBuilder();
 				CourseBuilder courseBuilder = new CourseBuilder();
@@ -313,7 +322,8 @@ public class DatabaseManager
 				.setUpdatedAt(result.getTimestamp("updated_at").getTime()).setCourse(courseBuilder.getBuild());
 				
 				studentExamBuilder.setId(result.getLong("s_id")).setResult(result.getFloat("s_result")).setCreatedAt(result.getTimestamp("s_created_at").getTime())
-				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime()).setStudent(null).setExam(examBuilder.getBuild());
+				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime())
+				.setStatus(EExamStatus.valueOf(result.getString("s_status"))).setStudent(null).setExam(examBuilder.getBuild());
 				
 				studentExams.add(studentExamBuilder.getBuild());
 			}
@@ -343,7 +353,7 @@ public class DatabaseManager
 		ResultSet result = executeSQLResulted();
 
 		try {
-			while(result.next()) {
+			while(result != null && result.next()) {
 				StudentTeacherBuilder studentTeacherBuilder = new StudentTeacherBuilder();
 				TeacherBuilder teacherBuilder = new TeacherBuilder();
 				UserBuilder userBuilder = new UserBuilder();
@@ -380,7 +390,7 @@ public class DatabaseManager
 		sql.setValues(uni);
 		ResultSet result = executeSQLResulted();	
 		try {
-			while(result.next()) {
+			while(result != null && result.next()) {
 				FacultyBuilder facultyBuilder = new FacultyBuilder();
 				
 				facultyBuilder.setId(result.getLong("id")).setName(result.getString("name"))
@@ -405,7 +415,7 @@ public class DatabaseManager
 		
 		try {
 			
-			while(result.next()) {
+			while(result != null && result.next()) {
 				DepartmentBuilder departmentBuilder = new DepartmentBuilder();
 				
 				departmentBuilder.setId(result.getLong("id")).setCreatedAt(result.getTimestamp("created_at").getTime())
@@ -430,9 +440,7 @@ public class DatabaseManager
 		ResultSet result = executeSQLResulted();
 		
 		try {
-			
-			
-			if(result.next()) {
+			if(result != null && result.next()) {
 				UniversityBuilder universityBuilder = new UniversityBuilder();
 				FacultyBuilder facultyBuilder = new FacultyBuilder();
 				DepartmentBuilder departmentBuilder = new DepartmentBuilder();
@@ -459,7 +467,7 @@ public class DatabaseManager
 		
 		ResultSet result = executeSQLResulted();
 		try {
-			if(result.next()) {
+			if(result != null && result.next()) {
 				
 				int exam_id = result.getInt("id");
 				
@@ -471,7 +479,7 @@ public class DatabaseManager
 				sql.setValues(user_id);
 				ResultSet result2 = executeSQLResulted();
 				
-				if(result2.next()) {
+				if(result2 != null &&result2.next()) {
 					//Daha önce bu sýnava kayýt oldunuz
 					return 3;
 				}
@@ -505,7 +513,7 @@ public class DatabaseManager
 		ResultSet result = executeSQLResulted();
 		
 		try {
-			if(result.next()) {
+			if(result != null && result.next()) {
 				found = true;
 				
 				ExamBuilder examBuilder = new ExamBuilder();
@@ -534,5 +542,70 @@ public class DatabaseManager
 		}
 		
 		return found && executeSQL() ? exam : null;
+	}
+	
+	public Exams getExamById(long id) {
+		Exams exam = null;
+		sql.setSQL("SELECT * FROM exams WHERE id = ?");
+		sql.setValues(id);
+		ResultSet result = executeSQLResulted();
+		
+		try {
+			if(result != null && result.next()) {
+				ExamBuilder examBuilder = new ExamBuilder();
+				CourseBuilder courseBuilder = new CourseBuilder();
+				
+				courseBuilder.setId(result.getLong("course_id"));
+				
+				examBuilder.setId(result.getLong("id")).setHeader(result.getString("header")).setInformation(result.getString("information"))
+				.setExamCode(result.getString("exam_code")).setQuestionCount(result.getInt("question_count")).setStartDate(result.getTimestamp("start_date").getTime())
+				.setEndDate(result.getTimestamp("end_date").getTime()).setTime(result.getInt("time")).setCreatedAt(result.getTimestamp("created_at").getTime())
+				.setUpdatedAt(result.getTimestamp("updated_at").getTime()).setCourse(courseBuilder.getBuild());
+				
+				exam = examBuilder.getBuild();
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return exam;
+	}
+	
+	public ArrayList<ExamQuestions> getExamQuestionsByExamId(long id){
+		ArrayList<ExamQuestions> exam_questions = new ArrayList<>();
+		sql.setSQL("SELECT * FROM exam_questions WHERE exam_id = ?");
+		sql.setValues(id);
+		ResultSet result = executeSQLResulted();
+		
+		try {
+			while(result != null && result.next()) {
+				ExamQuestionBuilder examQBuilder = new ExamQuestionBuilder();
+				ExamBuilder examBuilder = new ExamBuilder();
+				
+				examBuilder.setId(result.getLong("exam_id"));
+				
+				examQBuilder.setId(result.getLong("id")).setType(result.getString("type"))
+				.setQuestion(result.getString("question")).setAnswers(result.getString("answers"))
+				.setPoint(result.getFloat("point")).setCreatedAt(result.getTimestamp("created_at").getTime())
+				.setUpdatedAt(result.getTimestamp("updated_at").getTime());
+				
+				exam_questions.add(examQBuilder.getBuild());
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return exam_questions;
+	}
+	
+	public boolean setStudentExamStatus(long user, long exam, EExamStatus status) {
+		sql.setSQL("UPDATE student_exams SET status = ? WHERE student_id = ? AND exam_id = ?;");
+		sql.setValues(status.toString());
+		sql.setValues(user);
+		sql.setValues(exam);
+		
+		return executeSQL();
 	}
 }

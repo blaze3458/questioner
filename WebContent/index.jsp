@@ -1,12 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-9"
-    pageEncoding="ISO-8859-9"%>
+<%@page import="jakarta.servlet.http.HttpSession" %>
+<%@page import= "java.util.ArrayList" %>
+<%@page import="com.questioner.dictionary.EExamStatus"%>
+<%@page	import= "com.questioner.model.Users"%>
+<%@page	import= "com.questioner.model.StudentExams" %>
+	
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <!--===========================================================================-->
 <meta http-equiv = "Content-Type" content="text/html; charset=utf-8">
 <!--===========================================================================-->
-<title>Questioner - Çevrimiçi sınavlarınız için...</title>
+<title>Questioner - Ã‡evrimiÃ§i sÄ±navlarÄ±nÄ±z iÃ§in...</title>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -23,13 +29,7 @@
 <!--===============================================================================================-->
 </head>
 <body>
-<%@page 
-	import= "jakarta.servlet.http.HttpSession"
-	import= "java.util.ArrayList"
-	import= "com.questioner.model.Users"
-	import= "com.questioner.model.StudentExams" 
-	
-%>
+
 <% 
 	Users user = (Users)session.getAttribute("user"); 
 	ArrayList<StudentExams> exams = (ArrayList<StudentExams>)session.getAttribute("exams");
@@ -59,11 +59,11 @@
           				<ul class="dropdown-menu text-small" aria-labelledby="profileMenu">
           					<li><p class="dropdown-item"><%=user.getName() %> <%=user.getSurname() %></p></li>
           					<li><hr class="dropdown-divider"></li>
-           					<li><a class="dropdown-item" href="#">Sınav Geçmişi</a></li>
+           					<li><a class="dropdown-item" href="#">SÄ±nav GeÃ§miÅŸi</a></li>
             				<li><a class="dropdown-item" href="#">Ayarlar</a></li>
             				<li><a class="dropdown-item" href="/profile">Profil</a></li>
             				<li><hr class="dropdown-divider"></li>
-            				<li><a class="dropdown-item" href="/logout">Çıkış</a></li>
+            				<li><a class="dropdown-item" href="/logout">Ã‡Ä±kÄ±ÅŸ</a></li>
           				</ul>
         			</div>
 				</div>
@@ -71,15 +71,15 @@
 		</div>
 	<%
 	} 
-	if(user != null && user.getRole().equals("stu") && (int)session.getAttribute("exam_count") <= 0){
+	if(user != null && user.getRole().equals("stu") && !(boolean)session.getAttribute("has_exam")){
 	%>
 		<div class="con-center">
 			<div class="p-t-100 p-b-200">
 				<div class="flex-col-c flex-2 m-r-20">
-					<div class="txt-l text-left m-b-10">Herhangi bir sınava kayıt olmadın. Şimdi kodunu gir ve sınava başla.</div>
+					<div class="txt-l text-left m-b-10">Herhangi bir sÄ±nava kayÄ±t olmadÄ±n. Åimdi kodunu gir ve sÄ±nava baÅŸla.</div>
 					<form class="lg-form" action="/find_exam" method="GET">
 						<div class="flex-col">
-							<input class="inp" name="exam_uuid" type="text" placeholder="Sınav kodunu girin">
+							<input class="inp" name="exam_uuid" type="text" placeholder="SÄ±nav kodunu girin">
 						</div>
 						<div class="flex-col">
 							<button class="btn btn-b btn-blue">Ara</button>
@@ -88,7 +88,7 @@
 				</div>
 			</div>
 		</div>
-	<%}else if(user != null && user.getRole().equals("stu") && (int)session.getAttribute("exam_count") > 0){%>
+	<%}else if(user != null && user.getRole().equals("stu") && (boolean)session.getAttribute("has_exam")){%>
 		<div class="con-center p-t-20">
 			<div class="container shadow-sm border-0 bg-white rounded p-b-20">
 				<div class="col p-t-20 p-b-10">
@@ -106,24 +106,29 @@
 						</h2>
 						<div id="examCol_<%=e.getId() %>" class="accordion-collapse collapse" aria-labelledby="exam_<%=e.getId() %>" data-bs-parent="#examAcordion">
       						<div class="accordion-body">
-        						<h6 class="site-header">Sınav Bilgileri</h6>
+        						<h6 class="site-header">SÄ±nav Bilgileri</h6>
       							<hr />
         						<ul>
         							<li class="p-b-10"><%= e.getExam().getInformation()%></li>
-        							<li class="p-b-5"><p>Soru sayısı  : <%=e.getExam().getQuestionCount() %></p></li>
-        							<li class="p-b-5"><p>Sınav süresi : <%=e.getExam().getTime() %></p></li>
+        							<li class="p-b-5"><p>Soru sayÄ±sÄ±  : <%=e.getExam().getQuestionCount() %></p></li>
+        							<li class="p-b-5"><p>SÄ±nav sÃ¼resi : <%=e.getExam().getTime() %></p></li>
         						</ul>
         						<hr/>
         						<div class="flex-sb">
         							<div class="flex-col">
-        								<div class="p-b-5">Başlama tarihi - Bitiş tarihi</div>
+        								<div class="p-b-5">BaÅŸlama tarihi - BitiÅŸ tarihi</div>
         								<div class="p-b-5"><%= e.getExam().getStartDateStr() %> - <%= e.getExam().getEndDateStr() %></div>
         							</div>
         							<div class="flex-col-r">
-        							<%if(e.getExam().isInterval()) {%>
-        								<a class="btn btn-primary" href="/exam?id=<%=e.getExam().getId()%>">Sınava başla</a>
+        							<%if(e.getExam().isInterval()) {
+        								if(e.getStatus() == EExamStatus.STARTED){%>
+        									<a class="btn btn-primary" href="/exam?id=<%=e.getExam().getId()%>">SÄ±nava devam et</a>
+        								<%} 
+        								else{%>
+        									<a class="btn btn-primary" href="/exam?id=<%=e.getExam().getId()%>">SÄ±nava baÅŸla</a>
+        								<%} %>
         							<%}else{ %>
-        									<div class="p-b-5">Sınavın başlamasına:</div>
+        									<div class="p-b-5">SÄ±navÄ±n baÅŸlamasÄ±na:</div>
         									<div class="p-b-5" data-id="<%=e.getId() %>"  data-timeout = "<%=e.getExam().getEndDate()%>" data-startTime = "<%=e.getExam().getStartDate()%>"></div>
         							<%} %>
         							</div>
@@ -143,7 +148,7 @@
 			<div class="flex-row p-t-100 p-b-200">
 				<div class="flex-col-l-m flex-2 m-l-60 m-r-20">
 					<div class="site-header p-t-50 p-b-20 zoomIn animated"><h1>Questioner</h1></div>
-					<div class="txt-l txt-w-l lh-2-0 text-left fadeInDown animated">Questioner çevrimiçi sınav hizmeti sunar. Şimdi kayıt ol sınavlar oluştur veya öğrenci olarak sınava gir.</div>
+					<div class="txt-l txt-w-l lh-2-0 text-left fadeInDown animated">Questioner Ã§evrimiÃ§i sÄ±nav hizmeti sunar. Åimdi kayÄ±t ol sÄ±navlar oluÅŸtur veya Ã¶ÄŸrenci olarak sÄ±nava gir.</div>
 				</div>
 				<div class="flex-1 m-r-20 p-t-50">
 					<div class="lg-form-c">
@@ -153,19 +158,19 @@
 									<input class="inp" name="email" type="email" placeholder="E-posta">
 								</div>
 								<div class="form-i-con">
-									<input class="inp" name="password" type="password" placeholder="Şifre">
+									<input class="inp" name="password" type="password" placeholder="Åifre">
 								</div>
 								<div class="form-i-con">
-									<button class="btn btn-b btn-blue" type="submit">Giriş Yap</button>
+									<button class="btn btn-b btn-blue" type="submit">GiriÅŸ Yap</button>
 								</div>
 								<div class="form-i-con">
-									<a class="" href="/forget_password.jsp">Şifreni mi unuttun?</a>
+									<a class="" href="/forget_password.jsp">Åifreni mi unuttun?</a>
 								</div>
 							</form>
 						</div>
 						<hr/>
 						<div class="form-marg flex-c">
-							<button id="signUpForm" class="btn btn-b btn-green">Yeni Hesap Oluştur</button>
+							<button id="signUpForm" class="btn btn-b btn-green">Yeni Hesap OluÅŸtur</button>
 						</div>
 					</div>
 				</div>
@@ -180,25 +185,25 @@
         			<h5>Questioner</h5>
         			<ul class="nav flex-column">
           				<li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-muted">Ana sayfa</a></li>
-          				<li class="nav-item mb-2"><a href="/help" class="nav-link p-0 text-muted">Yardım</a></li>
-          				<li class="nav-item mb-2"><a href="/policies" class="nav-link p-0 text-muted">Koşullar</a></li>
-          				<li class="nav-item mb-2"><a href="/faq" class="nav-link p-0 text-muted">Sıkça sorulan sorular</a></li>
-          				<li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-muted">Hakkımızda</a></li>
+          				<li class="nav-item mb-2"><a href="/help" class="nav-link p-0 text-muted">YardÄ±m</a></li>
+          				<li class="nav-item mb-2"><a href="/policies" class="nav-link p-0 text-muted">KoÅŸullar</a></li>
+          				<li class="nav-item mb-2"><a href="/faq" class="nav-link p-0 text-muted">SÄ±kÃ§a sorulan sorular</a></li>
+          				<li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-muted">HakkÄ±mÄ±zda</a></li>
         			</ul>
       			</div>
       			<div class="col-2">
         			<h5>Site</h5>
         			<ul class="nav flex-column">
-          				<li class="nav-item mb-2"><a href="/site_map" class="nav-link p-0 text-muted">Site haritası</a></li>
-          				<li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-muted">Özellikler</a></li>
+          				<li class="nav-item mb-2"><a href="/site_map" class="nav-link p-0 text-muted">Site haritasÄ±</a></li>
+          				<li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-muted">Ã–zellikler</a></li>
           				<li class="nav-item mb-2"><a href="/career" class="nav-link p-0 text-muted">Kariyer</a></li>
-          				<li class="nav-item mb-2"><a href="/cookies" class="nav-link p-0 text-muted">Çerezler</a></li>
+          				<li class="nav-item mb-2"><a href="/cookies" class="nav-link p-0 text-muted">Ã‡erezler</a></li>
         			</ul>
       			</div>
       			<div class="col-4 offset-1">
         			<form>
-          				<h5>Bültene abone ol</h5>
-          				<p>Aylık haberlerden haberdar olmak ve bildirimler almak için abone ol.</p>
+          				<h5>BÃ¼ltene abone ol</h5>
+          				<p>AylÄ±k haberlerden haberdar olmak ve bildirimler almak iÃ§in abone ol.</p>
           				<div class="d-flex w-100 gap-2">
             				<label for="newsletter1" class="visually-hidden">Email adresi</label>
             				<input id="newsletter1" type="text" class="form-control" placeholder="Email adresi">
@@ -208,7 +213,7 @@
       			</div>
     		</div>
     		<div class="d-flex justify-content-between py-4 my-4 border-top">
-      			<p>Questioner © 2021 Company, Inc. Tüm hakları saklıdır.</p>
+      			<p>Questioner Â© 2021 Company, Inc. TÃ¼m haklarÄ± saklÄ±dÄ±r.</p>
       			<ul class="list-unstyled d-flex">
         			<li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use href="/svg/twitter.svg#twitter"></use></svg></a></li>
         			<li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="/svg/instagram.svg#instagram"></use></svg></a></li>
@@ -236,44 +241,44 @@
 				<hr/>
 				<form class="p-t-20 p-b-20 lg-form" id="registerForm" method="POST" action="">
 					<div class="form-i-con">
-						<input class="inp" name="name" type="text" placeholder="Adın" required>
+						<input class="inp" name="name" type="text" placeholder="AdÄ±n" required>
 					</div>
 					<div class="form-i-con">
-						<input class="inp" name="surname" type="text" placeholder="Soyadın" required>
+						<input class="inp" name="surname" type="text" placeholder="SoyadÄ±n" required>
 					</div>
 					<div class="form-i-con">
 						<input class="inp" name="email" type="email" placeholder="E-posta" required>
 					</div>
 					<div class="form-i-con">
-						<input class="inp" name="password" type="password" placeholder="Şifre" required>
+						<input class="inp" name="password" type="password" placeholder="Åifre" required>
 					</div>
 					<div class="form-i-con flex-col">
 						<select class="inp" name="type">
-							<option value="stu" selected>Öğrenci</option>
-							<option value="tea">Öğretmen</option>
+							<option value="stu" selected>Ã–ÄŸrenci</option>
+							<option value="tea">Ã–ÄŸretmen</option>
 						</select>
 					</div>
 					<div class="form-i-con flex-col">
-						<div class="p-b-5 p-t-5">Üniversite</div>
+						<div class="p-b-5 p-t-5">Ãœniversite</div>
 						<select class="inp" name="university">
-							<option value="none" selected>Seçiniz</option>
+							<option value="none" selected>SeÃ§iniz</option>
 						</select>
 					</div>
 					<div class="form-i-con flex-col">
-						<div class="p-b-5 p-t-5">Fakülte</div>
+						<div class="p-b-5 p-t-5">FakÃ¼lte</div>
 						<select class="inp" name="faculty">
-							<option value="none" selected>Seçiniz</option>
+							<option value="none" selected>SeÃ§iniz</option>
 						</select>
 					</div>
 					<div class="form-i-con flex-col">
-						<div class="p-b-5 p-t-5">Bölüm</div>
+						<div class="p-b-5 p-t-5">BÃ¶lÃ¼m</div>
 						<select class="inp" name="department">
-							<option value="none" selected>Seçiniz</option>
+							<option value="none" selected>SeÃ§iniz</option>
 						</select>
 					</div>
 					<div class="form-i-con">
 						 <input class="form-check-input mt-0" type="checkbox" name="check" required>
-						 <div class="m-l-10">Sözleşmeyi kabul ediyorum.</div>
+						 <div class="m-l-10">SÃ¶zleÅŸmeyi kabul ediyorum.</div>
 					</div>
 					<div class="form-i-con">
 						<button class="btn btn-b btn-blue" id="reqisterSubmit" type="submit">Tamamla</button>

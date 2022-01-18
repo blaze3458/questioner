@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.questioner.back.DatabaseManager;
+import com.questioner.back.Utils;
 import com.questioner.model.StudentExams;
 import com.questioner.model.Users;
 
@@ -32,6 +33,7 @@ public class Index extends HttpServlet {
 				ArrayList<StudentExams> examList = dbManager.getStudentExamsByUserIdAndNow(user.getId());
 				
 				request.getSession().setAttribute("exams", examList);
+				request.getSession().setAttribute("has_exam", Utils.hasAnyExam(examList));
 				request.getSession().setAttribute("exam_count", examList.size());
 			}	
 		}

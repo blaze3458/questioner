@@ -1,5 +1,6 @@
 package com.questioner.builder;
 
+import com.questioner.dictionary.EExamStatus;
 import com.questioner.model.Exams;
 import com.questioner.model.StudentExams;
 import com.questioner.model.Users;
@@ -20,6 +21,12 @@ public class StudentExamBuilder {
 	public StudentExamBuilder setResult(float result) {
 		studentExam.setResult(result);
 
+		return this;
+	}
+
+	public StudentExamBuilder setStatus(EExamStatus status) {
+		studentExam.setStatus(status);
+		
 		return this;
 	}
 

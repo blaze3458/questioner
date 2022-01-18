@@ -1,11 +1,14 @@
 package com.questioner.model;
 
+import com.questioner.dictionary.EExamStatus;
+
 public class StudentExams {
 	private long id;
 	private float result;
 	private long createdAt,updatedAt;
 	private Users student;
 	private Exams exam;
+	private EExamStatus status;
 	
 	public StudentExams() {}
 
@@ -23,6 +26,14 @@ public class StudentExams {
 
 	public void setResult(float result) {
 		this.result = result;
+	}
+	
+	public EExamStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(EExamStatus status) {
+		this.status = status;
 	}
 
 	public long getCreatedAt() {
