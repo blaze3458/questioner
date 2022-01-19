@@ -34,6 +34,7 @@
 <body>
 <% 
 	int lastQuestNumber = (int)session.getAttribute("last_question_number");
+	long examFinishTime = (long)session.getAttribute("exam_finish_time");
 
 	Users user = (Users)session.getAttribute("user");
 	Exams exam = (Exams)session.getAttribute("exam");
@@ -77,10 +78,10 @@
 					<div class="container py-5">
 						<div class="row m-1">
 							<div class="col-md-3 bg-color-form rounded py-3 mx-1">
-								<div class="p-2 g-1">Soru: <%=lastQuestNumber %>/<%=exam.getQuestionCount() %></div>
+								<div id="question_row" class="p-2 g-1">Soru: <%=lastQuestNumber %>/<%=exam.getQuestionCount() %></div>
 								<ul>
-									<li class="p-2 g-1">Puan: <%=quest.getPoint() %></li>
-									<li class="p-2 g-1">Kalan Süre: 00.00</li>
+									<li id="question_point" class="p-2 g-1">Puan: <%=quest.getPoint() %></li>
+									<li class="p-2 g-1">Kalan Süre:<span id="exam-remain-time" data-timeout="0" data-starttime="<%=examFinishTime%>">00.00</span></li>
 								</ul>
 								
 								<div class="d-flex justify-content-center p-2 g-1"><a class="btn btn-primary" href="/exam_finish">Sınavı bitir</a></div>
@@ -88,20 +89,20 @@
 							<div class="col bg-color-form rounded py-3 px-0 mx-1">
 								<div class="border-bottom py-3">
 									<ul>
-										<li><%=quest.getQuestion() %></li>
+										<li id="exam-question"><%=quest.getQuestion() %></li>
 									</ul>
 								</div> <!-- QUESTION CONTENT UP SIDE -->
 								<div class="p-2 g-1">
-									<div class="list-group">
+									<div id="exam-answers" class="list-group">
 										<%for(int i = 0; i < answerArray.size(); ++i) {%>				
-										<button class="py-3 list-group-item list-group-item-action"><%=answerArray.get(i).getAsString() %></button>
+										<button class="py-3 list-group-item list-group-item-action btn-answer" data-key="<%=i %>" data-value="<%=answerArray.get(i).getAsString()%>"><%=answerArray.get(i).getAsString() %></button>
 										<%} %>
 									</div>
 								</div> <!-- QUESTION CONTENT DOWN SIDE -->
 								<div class="p-2 g-1 d-flex justify-content-center">
 									<div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-										<button type="button" class="btn btn-primary">Sonraki</button>
-  										<button type="button" class="btn btn-primary">Önceki</button>
+										<button id="next_question" type="button" class="btn btn-primary">Sonraki</button>
+  										<button id="prev_question" type="button" class="btn btn-primary">Önceki</button>
 									</div>
 								</div>
 							</div> <!-- RIGHT SIDE -->
@@ -156,7 +157,7 @@
   		</footer>
 	</div>
 <!--===============================================================================================-->
-<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="/vendor/jquery/jquery-3.6.0.min.js"></script>
 <!--===============================================================================================-->
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!--===============================================================================================-->

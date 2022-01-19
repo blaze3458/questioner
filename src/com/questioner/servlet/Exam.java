@@ -24,8 +24,11 @@ public class Exam extends HttpServlet {
 	private static final int ERROR_QUESTIONS_NOT_READY = 2;
 	private static final int ERROR_START_EXAM_ALREADY = 3;
 	private static final int ERROR_FINISHED_EXAM_ALREADY = 4;
+	private static final int ERROR_EXAM_TIMEOUT = 5;
+	private static final int ERROR_EXAM_NOT_REGISTERED = 6;
 	private DatabaseManager dbManager;
 	private Exams exam;
+	private StudentExams my_exam;
 	private ArrayList<ExamQuestions> exam_questions;
 	
     public Exam() {
@@ -45,23 +48,33 @@ public class Exam extends HttpServlet {
     		return "Zaten bir sýnavý baþlatmýþsýnýz. Lütfen sýnavýn tamamlanmasýný bekleyin yada geçerli sýnava dönün.";
     	case ERROR_FINISHED_EXAM_ALREADY:
     		return "Zaten bu sýnavý tamamladýnýz. Lütfen baþka bir sýnava giriþi deneyin.";
+    	case ERROR_EXAM_TIMEOUT:
+    		return "Sýnav süresi tamamlandýðý için devam edemezsiniz.";
+    	case ERROR_EXAM_NOT_REGISTERED:
+    		return "Bu sýnava kayýt olmadýnýz.";
     	default:
     		return "Bilinmeyen bir hata ile karþýlaþýldý.Lütfen iletiþime geçin.";
     	}
     }
     
-    private void getExamInformations(long id) {
+    private void getExamInformations(long id,long user_id) {
     	exam = dbManager.getExamById(id);
     	exam_questions = dbManager.getExamQuestionsByExamId(id);
+    	my_exam = dbManager.getStudentExamByStudentIdAndExamId(id,user_id);
     }
     
-    private int checkExamError(long id, long startedExam, ArrayList<StudentExams> exams) {	
+    private int checkExamError(long id, long startedExam) {	
     	if(id == 0 || exam == null)
 			return ERROR_INVALID_EXAM_ID;
+    	else if(my_exam == null)
+    		return ERROR_EXAM_NOT_REGISTERED;
+    	else if(my_exam.getStatus().equals(EExamStatus.FINISHED))
+    		return ERROR_FINISHED_EXAM_ALREADY;
+    	else if(my_exam.getStartedTime() != 0 && System.currentTimeMillis() > (my_exam.getStartedTime() + exam.getTime()*Utils.MILIS_MINUTE) 
+    			|| System.currentTimeMillis() > exam.getEndDate())
+    		return ERROR_EXAM_TIMEOUT;
     	else if(id != startedExam && startedExam != 0)
     		return ERROR_START_EXAM_ALREADY;
-    	else if(!Utils.hasExamById(exams,id))
-    		return ERROR_FINISHED_EXAM_ALREADY;
     	else if(exam_questions.size() <= 0)
     		return ERROR_QUESTIONS_NOT_READY;
 
@@ -72,11 +85,10 @@ public class Exam extends HttpServlet {
 		HttpSession session = request.getSession();
 		long id = Long.parseLong(request.getParameter("id"));
 		Long startedExam = Utils.sessionAttributeDefault(session, "started_exam",0L);
-		ArrayList<StudentExams> exams = Utils.sessionAttributeDefault(session, "exams", null);
 		Users user = Utils.sessionAttributeDefault(session, "user", null);
 		
-		getExamInformations(id);
-		int error = checkExamError(id,startedExam,exams);
+		getExamInformations(id,user.getId());
+		int error = checkExamError(id,startedExam);
 	
 		if(error > 0) {
 			request.setAttribute("response", true);
@@ -95,7 +107,14 @@ public class Exam extends HttpServlet {
 			session.setAttribute("last_question_number",1);
 			session.setAttribute("exam", exam);
 			session.setAttribute("questions", exam_questions);
-			dbManager.setStudentExamStatus(user.getId(),id, EExamStatus.STARTED);
+			
+			if(my_exam.getStatus().equals(EExamStatus.STARTED)) {
+				session.setAttribute("exam_finish_time",my_exam.getStartedTime()+(exam.getTime()*Utils.MILIS_MINUTE));
+			}
+			else {
+				session.setAttribute("exam_finish_time",System.currentTimeMillis()+(exam.getTime()*Utils.MILIS_MINUTE));
+				dbManager.setStudentExamStatus(user.getId(),id, EExamStatus.STARTED);
+			}
 		}
 
 		request.getRequestDispatcher("/exam.jsp").forward(request, response);

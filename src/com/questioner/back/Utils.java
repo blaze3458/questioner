@@ -2,6 +2,7 @@ package com.questioner.back;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -12,6 +13,8 @@ import jakarta.servlet.http.HttpSession;
 
 @SuppressWarnings("unchecked")
 public class Utils {
+	
+	public static final int MILIS_MINUTE = 60 * 1000;
 	
 	public Utils() {
 		
@@ -58,6 +61,13 @@ public class Utils {
 		return false;
 	}
 	
+	public static long nullableTimestamp(Timestamp time, long def) {
+		if(time == null)
+			return def;
+		
+		return time.getTime();
+	}
+	
 	public static <T> Optional<T> sessionAttribute(HttpSession session, String key){
 		T attr = (T)session.getAttribute(key);
 		
@@ -70,4 +80,10 @@ public class Utils {
 		return attr != null ? attr : (T)def;
 	}
 
+	public static <T> T nullableDefault(T value, T def) {
+		if(value == null)
+			return def;
+		
+		return value;
+	}
 }

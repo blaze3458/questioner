@@ -30,6 +30,12 @@ public class StudentExamBuilder {
 		return this;
 	}
 
+	public StudentExamBuilder setStartedTime(long startedTime) {
+		studentExam.setStartedTime(startedTime);
+		
+		return this;
+	}
+
 	public StudentExamBuilder setCreatedAt(long createdAt) {
 		studentExam.setCreatedAt(createdAt);
 

@@ -248,7 +248,7 @@ public class DatabaseManager
 	public ArrayList<StudentExams> getStudentExamsByUserIdAndNow(long user_id){
 		ArrayList<StudentExams> studentExams = new ArrayList<>();
 		
-		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.status AS s_status, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
+		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.status AS s_status, s.started_time AS s_started_time, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
 				+ "	e.*, c.id AS course_id, c.name AS course_name, c.description AS course_description, c.created_at AS course_created_at,"
 				+ "	c.updated_at AS course_updated_at, t.id AS teacher_id, u.fullname AS teacher_name"
 				+ " FROM student_exams s INNER JOIN exams e ON s.exam_id = e.id INNER JOIN courses c ON e.course_id = c.id"
@@ -277,7 +277,7 @@ public class DatabaseManager
 				.setUpdatedAt(result.getTimestamp("updated_at").getTime()).setCourse(courseBuilder.getBuild());
 				
 				studentExamBuilder.setId(result.getLong("s_id")).setResult(result.getFloat("s_result")).setCreatedAt(result.getTimestamp("s_created_at").getTime())
-				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime())
+				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime()).setStartedTime(Utils.nullableTimestamp(result.getTimestamp("s_started_time"), 0L))
 				.setStatus(EExamStatus.valueOf(result.getString("s_status"))).setStudent(null).setExam(examBuilder.getBuild());
 				
 				studentExams.add(studentExamBuilder.getBuild());
@@ -293,7 +293,7 @@ public class DatabaseManager
 	public ArrayList<StudentExams> getStudentExamsByUserIdAndThen(long user_id){
 		ArrayList<StudentExams> studentExams = new ArrayList<>();
 		
-		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.status AS s_status, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
+		sql.setSQL("SELECT 	s.id AS s_id, s.result AS s_result, s.status AS s_status, s.started_time AS s_started_time, s.created_at AS s_created_at, s.updated_at AS s_updated_at,"
 				+ "	e.*, c.id AS course_id, c.name AS course_name, c.description AS course_description, c.created_at AS course_created_at,"
 				+ "	c.updated_at AS course_updated_at, t.id AS teacher_id, u.fullname AS teacher_name"
 				+ " FROM student_exams s INNER JOIN exams e ON s.exam_id = e.id INNER JOIN courses c ON e.course_id = c.id"
@@ -322,7 +322,7 @@ public class DatabaseManager
 				.setUpdatedAt(result.getTimestamp("updated_at").getTime()).setCourse(courseBuilder.getBuild());
 				
 				studentExamBuilder.setId(result.getLong("s_id")).setResult(result.getFloat("s_result")).setCreatedAt(result.getTimestamp("s_created_at").getTime())
-				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime())
+				.setUpdatedAt(result.getTimestamp("s_updated_at").getTime()).setStartedTime(Utils.nullableTimestamp(result.getTimestamp("s_started_time"), 0L))
 				.setStatus(EExamStatus.valueOf(result.getString("s_status"))).setStudent(null).setExam(examBuilder.getBuild());
 				
 				studentExams.add(studentExamBuilder.getBuild());
@@ -600,8 +600,44 @@ public class DatabaseManager
 		return exam_questions;
 	}
 	
+	public StudentExams getStudentExamByStudentIdAndExamId(long exam, long user) {
+		StudentExams student_exam = null;
+		sql.setSQL("SELECT * FROM student_exams WHERE student_id = ? AND exam_id = ?");
+		sql.setValues(user);
+		sql.setValues(exam);
+		ResultSet result = executeSQLResulted();
+		
+		try {
+			if(result != null && result.next()) {
+				StudentExamBuilder studentExamBuilder = new StudentExamBuilder();
+				ExamBuilder examBuilder = new ExamBuilder();
+				UserBuilder userBuilder = new UserBuilder();
+				
+				userBuilder.setId(result.getLong("student_id"));
+				examBuilder.setId(result.getLong("exam_id"));
+				
+				studentExamBuilder.setId(result.getLong("id")).setStatus(EExamStatus.valueOf(result.getString("status")))
+				.setResult(result.getFloat("result")).setStartedTime(Utils.nullableTimestamp(result.getTimestamp("started_time"), 0L))
+				.setCreatedAt(result.getTimestamp("created_at").getTime()).setUpdatedAt(result.getTimestamp("updated_at").getTime())
+				.setStudent(userBuilder.getBuild()).setExam(examBuilder.getBuild());
+				
+				student_exam = studentExamBuilder.getBuild();
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return student_exam;
+	}
+	
 	public boolean setStudentExamStatus(long user, long exam, EExamStatus status) {
-		sql.setSQL("UPDATE student_exams SET status = ? WHERE student_id = ? AND exam_id = ?;");
+		
+		if(status.equals(EExamStatus.STARTED))
+			sql.setSQL("UPDATE student_exams SET status = ?, updated_at = NOW(), started_time = NOW() WHERE student_id = ? AND exam_id = ?;");
+		else
+			sql.setSQL("UPDATE student_exams SET status = ?, updated_at = NOW() WHERE student_id = ? AND exam_id = ?;");
+		
 		sql.setValues(status.toString());
 		sql.setValues(user);
 		sql.setValues(exam);

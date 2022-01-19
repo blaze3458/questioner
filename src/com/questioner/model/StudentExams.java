@@ -6,9 +6,10 @@ public class StudentExams {
 	private long id;
 	private float result;
 	private long createdAt,updatedAt;
+	private EExamStatus status;
+	private long startedTime;
 	private Users student;
 	private Exams exam;
-	private EExamStatus status;
 	
 	public StudentExams() {}
 
@@ -34,6 +35,14 @@ public class StudentExams {
 
 	public void setStatus(EExamStatus status) {
 		this.status = status;
+	}
+
+	public long getStartedTime() {
+		return startedTime;
+	}
+
+	public void setStartedTime(long startedTime) {
+		this.startedTime = startedTime;
 	}
 
 	public long getCreatedAt() {
